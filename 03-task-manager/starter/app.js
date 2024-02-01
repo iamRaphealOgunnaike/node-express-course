@@ -3,6 +3,8 @@ const app = express()
 const tasks = require("./routes/task")
 const connectDB = require('./db/connect')
 require('dotenv').config()
+const notFound = require('./middleware/not-Found')
+const errorHandlerMiddleware = require('./middleware/error-handler')
 
 // middleware
 app.use(express.static('./public'))
@@ -10,17 +12,11 @@ app.use(express.json());
 
 //routes
 
-app.get("/hello", (req, res) => {
-  res.send("TaskManager App");
-});
 
-app.use("/api/v1/tasks", tasks);
+app.use("/api/v1/tasks", tasks)
 
-// app.get('/api/v1/tasks', (req, res) =>{}); - get all the tasks
-// app.post('/api/v1/tasks)  - create a new task
-// app.get('/api/v1/tasks/:id') - get single task
-// app.patch('/api/v1/tasks/:id') - update task
-// app.delete('/api/v1/tasks/:id') - delete task
+app.use(notFound)
+app.use(errorHandlerMiddleware)
 
 const port = 3000;
 
